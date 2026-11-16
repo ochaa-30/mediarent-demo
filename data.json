@@ -1,0 +1,133 @@
+{
+  "products": [
+    {
+      "id": "TV32",
+      "nama": "Smart TV LED 32 Inch",
+      "kategori": "Televisi",
+      "spesifikasi": "32 Inch Display HD 1080p",
+      "harga": 150000,
+      "stok": 5,
+      "gambar": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "TV43",
+      "nama": "Smart TV LED 43 Inch",
+      "kategori": "Televisi",
+      "spesifikasi": "43 Inch Display 4K UHD",
+      "harga": 250000,
+      "stok": 4,
+      "gambar": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "TV55",
+      "nama": "Smart TV LED 55 Inch",
+      "kategori": "Televisi",
+      "spesifikasi": "55 Inch Display 4K Ultra HD",
+      "harga": 450000,
+      "stok": 3,
+      "gambar": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "TV75",
+      "nama": "Ultra HD TV 75 Inch",
+      "kategori": "Televisi",
+      "spesifikasi": "75 Inch Display 4K HDR",
+      "harga": 850000,
+      "stok": 2,
+      "gambar": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "TV100",
+      "nama": "Giant LED TV 100 Inch",
+      "kategori": "Televisi",
+      "spesifikasi": "100 Inch Display 4K Conference Grade",
+      "harga": 3000000,
+      "stok": 1,
+      "gambar": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "TVTS",
+      "nama": "Interactive Touchscreen TV",
+      "kategori": "Touchscreen",
+      "spesifikasi": "55 Inch Multi-touch Display Kiosk",
+      "harga": 1200000,
+      "stok": 2,
+      "gambar": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "SLG3",
+      "nama": "Starlink Satellite Kit Gen 3",
+      "kategori": "Jaringan",
+      "spesifikasi": "Unlimited High-Speed Outdoor Internet",
+      "harga": 750000,
+      "stok": 3,
+      "gambar": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "MDM1",
+      "nama": "Modem Router WiFi Enterprise",
+      "kategori": "Jaringan",
+      "spesifikasi": "Dual Band 4G/5G Heavy Duty Router",
+      "harga": 150000,
+      "stok": 10,
+      "gambar": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "id": "KBL1",
+      "nama": "Kabel LAN Cat6 Premium (20m)",
+      "kategori": "Aksesori",
+      "spesifikasi": "High Speed Cat6 Patch Cable",
+      "harga": 25000,
+      "stok": 20,
+      "gambar": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=400&q=80"
+    }
+  ],
+  "portfolios": [
+    {
+      "id": "PF01",
+      "judul": "Pameran Otomotif Jakarta 2026",
+      "kategori": "Exhibition",
+      "deskripsi": "Pengadaan 10 Unit TV 55 Inch & Starlink Gen 3",
+      "gambar": "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=500&q=80"
+    },
+    {
+      "id": "PF02",
+      "judul": "National Tech Conference",
+      "kategori": "Corporate",
+      "deskripsi": "TV Touchscreen 75 Inch untuk Booth Registrasi",
+      "gambar": "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=500&q=80"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "TS01",
+      "nama": "Budi Pratama",
+      "perusahaan": "PT Event Organizer Asia",
+      "komentar": "TV 85 inch jernih banget, pengiriman super cepat!",
+      "rating": 5
+    },
+    {
+      "id": "TS02",
+      "nama": "Siska Melani",
+      "perusahaan": "Wedding Planner Jakarta",
+      "komentar": "Starlink Gen 3 sangat membantu event outdoor kami di area terpencil.",
+      "rating": 5
+    }
+  ],
+  "blogs": [
+    {
+      "id": "BL01",
+      "judul": "Tips Memilih Ukuran TV untuk Booth Pameran",
+      "kategori": "Edukasi",
+      "ringkasan": "Panduan memilih ukuran TV yang tepat dari 32 hingga 100 inch.",
+      "gambar": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=500&q=80"
+    },
+    {
+      "id": "BL02",
+      "judul": "Keunggulan Starlink Gen 3 untuk Event Outdoor",
+      "kategori": "Jaringan",
+      "ringkasan": "Solusi jaringan satelit kecepatan tinggi di area minim sinyal.",
+      "gambar": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=500&q=80"
+    }
+  ]
+}

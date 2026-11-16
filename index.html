@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediaRent - Penyewaan Alat Multimedia & Network Event</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandRed: '#C8102E',
+            brandRedHover: '#A60B24',
+            brandRedLight: '#FFF0F2',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none"></div>
+
+  <!-- Header Sticky & Navigasi Brand MediaRent Baru -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm w-full">
+    <div class="max-w-7xl mx-auto px-2 sm:px-4 py-3 flex items-center justify-between gap-1 sm:gap-2">
+      <button id="mobile-menu-toggle" type="button" onclick="toggleMobileMenu()" aria-label="Buka menu navigasi" aria-controls="mobile-menu" aria-expanded="false" class="lg:hidden shrink-0 w-9 h-9 flex items-center justify-center rounded-lg text-slate-700 hover:bg-red-50 hover:text-brandRed transition focus:outline-none focus:ring-2 focus:ring-brandRed">
+        <i id="mobile-menu-icon" class="fa-solid fa-bars text-lg" aria-hidden="true"></i>
+      </button>
+      
+      <!-- Brand Logo MediaRent (SVG Identik dengan Gambar Logo Terbaru) -->
+      <div class="flex items-center gap-2 sm:gap-3 cursor-pointer shrink-0" onclick="navigateTo('home')">
+        <div class="relative w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-brandRed rounded-lg p-1.5 shadow-sm">
+          <!-- Geometric Play Button Shape inside MR -->
+          <svg viewBox="0 0 100 100" class="w-full h-full fill-white">
+            <path d="M 15 15 L 45 50 L 15 85 L 35 85 L 50 60 L 65 85 L 85 85 L 50 35 L 75 35 C 85 35 85 15 70 15 Z M 48 40 L 68 52 L 48 64 Z" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-lg sm:text-2xl font-black tracking-tight text-brandRed leading-none">MediaRent</span>
+          <span class="hidden sm:block text-[9px] font-bold tracking-[0.15em] text-slate-400 uppercase">Multimedia Rental</span>
+        </div>
+      </div>
+
+      <!-- Navigasi Desktop -->
+      <nav class="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-600">
+        <button onclick="navigateTo('home')" class="hover:text-brandRed transition">Home</button>
+        <button onclick="navigateTo('about')" class="hover:text-brandRed transition">About Company</button>
+        <button onclick="navigateTo('product')" class="hover:text-brandRed transition">Product</button>
+        <button onclick="navigateTo('portfolio')" class="hover:text-brandRed transition">Portofolio</button>
+        <button onclick="navigateTo('testimoni')" class="hover:text-brandRed transition">Testimoni</button>
+        <button onclick="navigateTo('blog')" class="hover:text-brandRed transition">Blog</button>
+      </nav>
+
+      <!-- Area Kanan Navbar: Pencarian & 1 Keranjang -->
+      <div class="flex items-center gap-1 sm:gap-3 shrink-0">
+        <!-- Input Pencarian -->
+        <div class="relative">
+          <input type="search" id="header-search" oninput="handleSearch(event)" aria-label="Cari produk" placeholder="Cari..." class="w-20 sm:w-40 lg:w-56 bg-slate-100 border border-slate-200 rounded-full px-3 py-1.5 text-xs focus:ring-2 focus:ring-red-600 outline-none pl-8">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+
+        <!-- 1 Tombol Keranjang -->
+        <button type="button" onclick="toggleCart()" class="relative p-2 bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 rounded-full transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"></path>
+          </svg>
+          <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">
+            0
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-100 bg-white shadow-inner">
+      <nav aria-label="Menu utama" class="mx-auto grid max-w-7xl gap-1 px-2 py-3 text-sm font-semibold text-slate-700 sm:px-4">
+        <button type="button" onclick="navigateTo('home')" class="w-full rounded-lg px-3 py-2.5 text-left hover:bg-red-50 hover:text-brandRed">Home</button>
+        <button type="button" onclick="navigateTo('about')" class="w-full rounded-lg px-3 py-2.5 text-left hover:bg-red-50 hover:text-brandRed">About Company</button>
+        <button type="button" onclick="navigateTo('product')" class="w-full rounded-lg px-3 py-2.5 text-left hover:bg-red-50 hover:text-brandRed">Product</button>
+        <button type="button" onclick="navigateTo('portfolio')" class="w-full rounded-lg px-3 py-2.5 text-left hover:bg-red-50 hover:text-brandRed">Portofolio</button>
+        <button type="button" onclick="navigateTo('testimoni')" class="w-full rounded-lg px-3 py-2.5 text-left hover:bg-red-50 hover:text-brandRed">Testimoni</button>
+        <button type="button" onclick="navigateTo('blog')" class="w-full rounded-lg px-3 py-2.5 text-left hover:bg-red-50 hover:text-brandRed">Blog</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6">
+
+    <!-- 1. PAGE: HOME -->
+    <section id="page-home" class="space-y-8 lg:space-y-12">
+      <!-- Hero Banner Modern Red Velvet -->
+      <div class="bg-gradient-to-r from-red-950 via-red-900 to-slate-900 rounded-3xl p-6 lg:p-12 text-white flex flex-col lg:flex-row items-center justify-between gap-8 shadow-2xl border border-red-900/50">
+        <div class="space-y-4 max-w-xl">
+          <span class="bg-white/10 text-brandRedLight font-bold text-xs px-3.5 py-1 rounded-full border border-white/20 inline-block backdrop-blur-md">
+            <i class="fa-solid fa-circle-play text-brandRed mr-1.5"></i>#1 Media & Event Equipment Rental
+          </span>
+          <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black leading-tight">Rental TV Display, Touchscreen & Internet Satelit Event</h1>
+          <p class="text-slate-200 text-xs sm:text-sm">Menyediakan TV LED 32" hingga 100", Touchscreen Kiosk, Starlink Gen 3, Router Enterprise, dan Aksesori Kabel terlengkap untuk kebutuhan event Anda.</p>
+          <div class="flex flex-wrap gap-3 pt-2">
+            <button onclick="navigateTo('product')" class="bg-brandRed hover:bg-brandRedHover text-white font-bold px-6 py-3 rounded-xl text-xs sm:text-sm shadow-lg transition flex items-center gap-2">
+              <i class="fa-solid fa-layer-group"></i> Lihat Katalog Unit
+            </button>
+            <button onclick="navigateTo('about')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3 rounded-xl text-xs sm:text-sm transition backdrop-blur-md border border-white/10">
+              Profil Perusahaan
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 sm:gap-4 w-full lg:w-auto">
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center hover:bg-white/15 transition">
+            <i class="fa-solid fa-tv text-3xl text-brandRedLight mb-2"></i>
+            <h4 class="font-bold text-sm sm:text-lg">TV 32" - 100"</h4>
+            <p class="text-[10px] sm:text-xs text-slate-300">Display 4K UHD</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center hover:bg-white/15 transition">
+            <i class="fa-solid fa-hand-pointer text-3xl text-brandRedLight mb-2"></i>
+            <h4 class="font-bold text-sm sm:text-lg">Touchscreen</h4>
+            <p class="text-[10px] sm:text-xs text-slate-300">Interactive Kiosk</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center hover:bg-white/15 transition">
+            <i class="fa-solid fa-satellite-dish text-3xl text-brandRedLight mb-2"></i>
+            <h4 class="font-bold text-sm sm:text-lg">Starlink Gen 3</h4>
+            <p class="text-[10px] sm:text-xs text-slate-300">Internet Outdoor</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center hover:bg-white/15 transition">
+            <i class="fa-solid fa-network-wired text-3xl text-brandRedLight mb-2"></i>
+            <h4 class="font-bold text-sm sm:text-lg">Kabel & Router</h4>
+            <p class="text-[10px] sm:text-xs text-slate-300">Network Ready</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Terfavorit -->
+      <div class="space-y-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-slate-800">Unit Terfavorit</h2>
+            <p class="text-xs text-slate-500">Unit paling populer untuk event pameran dan konvensi</p>
+          </div>
+          <button onclick="navigateTo('product')" class="text-brandRed font-bold text-xs hover:underline">Lihat Semua Katalog →</button>
+        </div>
+        <div id="home-featured-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"></div>
+      </div>
+    </section>
+
+    <!-- 2. PAGE: ABOUT COMPANY -->
+    <section id="page-about" class="hidden space-y-8 py-4">
+      
+      <!-- Bagian Atas: Profil Utama Perusahaan -->
+      <div class="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+        <div class="max-w-3xl space-y-3">
+          <span class="text-xs font-bold text-red-600 uppercase tracking-wider bg-red-50 px-3 py-1 rounded-full">
+            Tentang MediaRent
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
+            Partner Teknis Andalan untuk Display & Koneksi Acara Tanpa Drama
+          </h2>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Mengurus teknis acara sering kali bikin panitia kewalahan. Di sinilah <strong>MediaRent</strong> hadir sebagai partner andalan bagi Event Organizer, agensi, maupun perusahaan. Kami menyediakan layanan sewa perangkat display dan jaringan event yang lengkap—mulai dari unit yang terawat, pengiriman tepat waktu, hingga teknisi yang siap siaga di lokasi. Tujuannya sederhana: <strong>kami yang bereskan kerumitan teknisnya, supaya Anda bisa fokus penuh menyukseskan jalannya acara.</strong>
+          </p>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Mulai dari pameran dagang, seminar, peluncuran produk, rapat tahunan, hingga festival <em>outdoor</em>, seluruh unit <strong>Smart TV 4K, Interactive Touchscreen, Starlink Gen 3, Modem, dan Kabel LAN Cat6</strong> kami pastikan tiba dalam kondisi prima dan terpasang rapi sesuai jadwal venue.
+          </p>
+        </div>
+
+        <!-- 4 Pilar Keunggulan -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+            <div class="w-9 h-9 rounded-xl bg-red-600 text-white flex items-center justify-center text-sm font-bold">
+              <i class="fa-solid fa-tv"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm">Unit Terawat & Siap Pakai</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Setiap unit layar dan perangkat jaringan selalu dicek dan dibersihkan sebelum dikirim, jadi Anda terima beres di lokasi.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+            <div class="w-9 h-9 rounded-xl bg-red-600 text-white flex items-center justify-center text-sm font-bold">
+              <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm">Loading Tepat Waktu</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Pengiriman, perakitan <em>standing bracket</em>, hingga penarikan kabel mengikuti jadwal <em>loading</em> gedung tanpa molor.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+            <div class="w-9 h-9 rounded-xl bg-red-600 text-white flex items-center justify-center text-sm font-bold">
+              <i class="fa-solid fa-wifi"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm">Internet Stabil Tanpa Putus</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Kombinasi satelit Starlink Gen 3 dan kabel LAN Cat6 menjaga <em>live streaming</em> maupun sistem tiket berjalan mulus.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+            <div class="w-9 h-9 rounded-xl bg-red-600 text-white flex items-center justify-center text-sm font-bold">
+              <i class="fa-solid fa-headset"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm">Teknisi Standby di Lokasi</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Tim kami siap bantu mulai dari konsultasi sebelum acara hingga mendampingi teknis di lapangan sampai acara selesai.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bagian Tengah: Visi & Misi -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+          <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Visi Kami</span>
+          <h3 class="text-lg font-black text-slate-900">Menjadi Partner Teknis Event Paling Diandalkan</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Menjadi penyedia layanan sewa perangkat display multimedia dan solusi koneksi event yang paling responsif, praktis, dan tepercaya bagi setiap penyelenggara acara di Indonesia.
+          </p>
+        </div>
+
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+          <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Misi Kami</span>
+          <h3 class="text-lg font-black text-slate-900">Bereskan Teknisnya, Sukseskan Acaranya</h3>
+          <ul class="text-xs sm:text-sm text-slate-600 space-y-2 list-disc pl-4">
+            <li>Menghadirkan perangkat display dan jaringan berkualitas tinggi dengan harga sewa yang jelas dan bersahabat.</li>
+            <li>Memastikan pengiriman tepat waktu, instalasi kabel yang rapi, dan standar keamanan venue yang terjaga.</li>
+            <li>Memberikan rekomendasi spesifikasi yang pas sesuai luas ruangan, jumlah peserta, dan anggaran klien.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bagian Bawah: Ajakan Konsultasi / CTA -->
+      <div class="bg-gradient-to-r from-slate-900 to-red-950 rounded-3xl p-6 sm:p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-lg">
+        <div class="space-y-1.5 text-center sm:text-left">
+          <h3 class="text-lg sm:text-xl font-black">Masih Bingung Menentukan Unit yang Pas?</h3>
+          <p class="text-xs sm:text-sm text-slate-300">
+            Ceritakan konsep acara, luas booth, atau kebutuhan internet Anda—tim kami bantu hitungkan solusinya gratis.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3 shrink-0">
+          <button type="button" onclick="navigateTo('product')" class="bg-red-600 hover:bg-red-500 text-white font-bold px-5 py-3 rounded-xl text-xs transition shadow">
+            Lihat Katalog Unit
+          </button>
+          <a href="https://wa.me/6285780325481?text=Halo%20Admin%20MediaRent%2C%20saya%20ingin%20konsultasi%20kebutuhan%20sewa%20unit%20untuk%20event%20kami." target="_blank" class="bg-white text-slate-900 hover:bg-slate-100 font-bold px-5 py-3 rounded-xl text-xs transition shadow">
+            Chat WhatsApp Sekarang
+          </a>
+        </div>
+      </div>
+    </section>
+
+<!-- 3. PAGE: PRODUCT CATALOG -->
+    <section id="page-product" class="hidden space-y-6 py-6">
+      <!-- Filter Bar Header -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto no-scrollbar" id="product-category-filters">
+          <button type="button" onclick="filterCategory('ALL')" class="prod-cat-btn shrink-0 px-4 py-2 rounded-xl text-xs font-bold bg-red-600 text-white shadow">Semua Unit</button>
+          <button type="button" onclick="filterCategory('TV')" class="prod-cat-btn shrink-0 px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">TV Display</button>
+          <button type="button" onclick="filterCategory('Touchscreen')" class="prod-cat-btn shrink-0 px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Touchscreen</button>
+          <button type="button" onclick="filterCategory('Internet')" class="prod-cat-btn shrink-0 px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Starlink & Modem</button>
+          <button type="button" onclick="filterCategory('Aksesoris')" class="prod-cat-btn shrink-0 px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Kabel & Aksesori</button>
+        </div>
+      </div> <!-- Tag penutup ini yang sebelumnya kurang -->
+
+      <!-- Grid Tempat Kartu Produk Muncul -->
+      <div id="products-catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+        <!-- Kartu produk dari JavaScript akan otomatis ter-render di sini -->
+      </div>
+    </section>
+
+    <!-- 4. PAGE: PORTOFOLIO -->
+    <section id="page-portfolio" class="hidden space-y-6">
+      <div>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-800">Portofolio Event</h2>
+        <p class="text-xs text-slate-500">Dokumentasi pameran & event yang telah sukses ditangani MediaRent</p>
+      </div>
+      <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
+    </section>
+
+    <!-- 5. PAGE: TESTIMONI -->
+    <section id="page-testimoni" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-800">Ulasan & Komentar Klien</h2>
+          <p class="text-xs text-slate-500">Pengalaman nyata para penyelenggara event menggunakan layanan MediaRent</p>
+        </div>
+        <button onclick="openTestiModal()" class="bg-brandRed hover:bg-brandRedHover text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition">
+          <i class="fa-solid fa-pen mr-1"></i> Tulis Ulasan
+        </button>
+      </div>
+      <div id="testimoni-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"></div>
+    </section>
+
+    <!-- 6. PAGE: BLOG -->
+    <section id="page-blog" class="hidden space-y-6">
+      <div>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-800">Artikel & Tips Multimedia</h2>
+        <p class="text-xs text-slate-500">Artikel edukatif seputar teknologi visual dan persiapan jaringan acara</p>
+      </div>
+      <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
+    </section>
+
+  </main>
+
+  <!-- Modal Keranjang & Checkout Form (Direct WhatsApp) -->
+  <div id="cart-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-5 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-base sm:text-lg font-bold text-slate-800"><i class="fa-solid fa-cart-flatbed text-brandRed mr-2"></i>Keranjang Sewa MediaRent</h3>
+        <button onclick="closeCartModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+      </div>
+
+      <div id="cart-items-container" class="space-y-3 divide-y divide-slate-100 text-xs"></div>
+
+      <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-3 pt-3 border-t">
+        <h4 class="font-bold text-xs sm:text-sm text-slate-800">Form Pemesanan & Alamat Event</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Nama Pemesan *</label>
+            <input type="text" id="b-nama" required class="w-full bg-slate-50 border rounded-lg px-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-brandRed">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Instansi / Event</label>
+            <input type="text" id="b-instansi" placeholder="PT / EO / Perorangan" class="w-full bg-slate-50 border rounded-lg px-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-brandRed">
+          </div>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">No. WhatsApp Aktif *</label>
+          <input type="text" id="b-wa" required placeholder="Contoh: 08123456789" class="w-full bg-slate-50 border rounded-lg px-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-brandRed">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Tanggal Mulai *</label>
+            <input type="date" id="b-tgl-mulai" onchange="calculateTotalCost()" required class="w-full bg-slate-50 border rounded-lg px-2.5 py-1.5 text-xs outline-none focus:ring-1 focus:ring-brandRed">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Tanggal Selesai *</label>
+            <input type="date" id="b-tgl-selesai" onchange="calculateTotalCost()" required class="w-full bg-slate-50 border rounded-lg px-2.5 py-1.5 text-xs outline-none focus:ring-1 focus:ring-brandRed">
+          </div>
+        </div>
+
+        <div class="bg-brandRedLight/60 p-3 rounded-xl border border-brandRed/20 flex justify-between items-center text-xs">
+          <div>
+            <span class="text-slate-600 block">Durasi Sewa: <strong id="summary-days">0 Hari</strong></span>
+            <span class="text-slate-600 block">Total Estimasi:</span>
+          </div>
+          <span id="summary-total" class="text-base sm:text-lg font-black text-brandRed">Rp 0</span>
+        </div>
+
+        <button type="submit" id="btn-submit-booking" class="w-full bg-brandRed hover:bg-brandRedHover text-white font-bold py-3 rounded-xl text-xs shadow-md transition flex items-center justify-center gap-2">
+          <i class="fa-brands fa-whatsapp text-lg"></i> Pesan Langsung via WhatsApp Admin
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Form Testimoni -->
+  <div id="testi-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-xl max-w-md w-full p-5 sm:p-6 space-y-4">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-base sm:text-lg font-bold text-slate-800">Tulis Ulasan Anda </h3>
+        <button onclick="closeTestiModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+      </div>
+      <form onsubmit="handleTestiSubmit(event)" class="space-y-3">
+        <div>
+          <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Nama Anda *</label>
+          <input type="text" id="t-nama" required class="w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-brandRed">
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Perusahaan / EO</label>
+          <input type="text" id="t-perusahaan" class="w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-brandRed">
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Rating</label>
+          <select id="t-rating" class="w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-brandRed">
+            <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+            <option value="4">⭐⭐⭐⭐ (4/5)</option>
+            <option value="4">⭐⭐⭐ (3/5)</option>
+            <option value="4">⭐⭐ (2/5)</option>
+            <option value="4">⭐ (1/5)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Ulasan / Komentar *</label>
+          <textarea id="t-komentar" required rows="3" class="w-full bg-slate-50 border rounded-lg px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-brandRed"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-brandRed hover:bg-brandRedHover text-white font-bold py-2.5 rounded-xl text-xs transition">Kirim Ulasan</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer Brand MediaRent -->
+  <footer class="bg-slate-900 text-white mt-auto border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+      <div class="flex items-center gap-2 text-center md:text-left">
+        <span class="font-bold text-white">MEDIARENT</span> — Multimedia Display & Event Satellite Network
+      </div>
+      <div>
+        &copy; 2026 MediaRent. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+<!-- DRAWER KERANJANG & FORM PEMESANAN -->
+  <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+    <div onclick="toggleCart()" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+
+    <div class="fixed inset-y-0 right-0 max-w-full flex pl-6">
+      <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col h-full">
+        
+        <!-- Header -->
+        <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-white shrink-0">
+          <h2 class="text-base font-bold text-slate-800">Keranjang & Pemesanan</h2>
+          <button type="button" onclick="toggleCart()" class="text-slate-400 hover:text-red-600 text-2xl font-bold px-2">&times;</button>
+        </div>
+
+        <!-- Konten Scrollable: Rincian Barang + Form Data Pemesan -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-5 bg-slate-50">
+          
+          <!-- Bagian 1: Rincian Unit yang Disewa -->
+          <div>
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Rincian Unit Disewa</h3>
+            <div id="cart-items-box" class="space-y-2.5"></div>
+          </div>
+
+          <!-- Bagian 2: Form Data Pemesan -->
+          <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)" class="bg-white p-4 rounded-xl border border-slate-200 space-y-3 shadow-sm">
+            <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Data Pemesan</h3>
+            
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap / PIC *</label>
+              <input type="text" id="checkout-name" required placeholder="Contoh: Andi Wijaya" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-red-600 outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">No. WhatsApp Aktif *</label>
+              <input type="tel" id="checkout-phone" required placeholder="Contoh: 08123456789" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-red-600 outline-none">
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Mulai *</label>
+                <input type="date" id="checkout-start-date" onchange="updateCartUI()" oninput="updateCartUI()" required class="w-full border border-slate-300 rounded-lg px-2.5 py-2 text-xs focus:ring-2 focus:ring-red-600 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Selesai *</label>
+                <input type="date" id="checkout-end-date" onchange="updateCartUI()" oninput="updateCartUI()" required class="w-full border border-slate-300 rounded-lg px-2.5 py-2 text-xs focus:ring-2 focus:ring-red-600 outline-none">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Alamat Lokasi Event / Catatan</label>
+              <textarea id="checkout-notes" rows="2" placeholder="Nama gedung, jam loading, dll..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-red-600 outline-none"></textarea>
+            </div>
+          </form>
+
+        </div>
+
+        <!-- Footer Total & Tombol Kirim Pesanan -->
+        <div class="p-4 border-t border-slate-200 bg-white shrink-0 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="block text-xs text-slate-500 font-semibold">Total Estimasi Sewa</span>
+              <span id="cart-duration-label" class="text-[11px] font-bold text-slate-700">Durasi Sewa: 1 Hari</span>
+            </div>
+            <span id="cart-total-price" class="text-lg font-bold text-red-600">Rp 0</span>
+          </div>
+          <button type="submit" form="checkout-form" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-md cursor-pointer">
+            Kirim Pesanan via WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artikel MediaRent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { brandRed: '#C8102E', brandRedHover: '#A60B24', brandRedLight: '#FFF0F2' } } }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased font-sans">
+  <header class="sticky top-0 z-10 border-b border-slate-200 bg-white">
+    <div class="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
+      <a href="index.html" class="flex items-center gap-2 font-black text-brandRed" aria-label="MediaRent, kembali ke beranda">
+        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-brandRed text-white"><i class="fa-solid fa-play"></i></span>
+        <span>MediaRent</span>
+      </a>
+      <a href="index.html?page=blog" class="text-sm font-semibold text-slate-600 hover:text-brandRed">
+        <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Blog
+      </a>
+    </div>
+  </header>
+
+  <main id="article-detail" class="mx-auto max-w-4xl px-4 py-8 sm:py-12">
+    <article class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+      <img id="article-image" class="h-56 w-full object-cover sm:h-80" alt="">
+      <div class="p-5 sm:p-10">
+        <p id="article-category" class="mb-3 text-xs font-bold uppercase tracking-wider text-brandRed"></p>
+        <h1 id="article-title" class="text-2xl font-black leading-tight text-slate-900 sm:text-4xl"></h1>
+        <p id="article-summary" class="mt-4 border-b border-slate-100 pb-6 text-base leading-relaxed text-slate-500"></p>
+        <div id="article-body" class="mt-6 space-y-5 text-sm leading-7 text-slate-700 sm:text-base"></div>
+        <div class="mt-10 rounded-2xl bg-brandRedLight p-5 sm:p-6">
+          <h2 class="font-bold text-slate-900">Butuh peralatan untuk acara Anda?</h2>
+          <p class="mt-1 text-sm leading-relaxed text-slate-600">Lihat katalog MediaRent dan pilih perangkat multimedia atau jaringan yang sesuai dengan kebutuhan event.</p>
+          <a href="index.html?page=product" class="mt-4 inline-flex items-center gap-2 rounded-xl bg-brandRed px-4 py-2.5 text-sm font-bold text-white transition hover:bg-brandRedHover">
+            Lihat katalog <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+    <div id="article-not-found" class="hidden rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <h1 class="text-xl font-bold text-slate-900">Artikel tidak ditemukan</h1>
+      <p class="mt-2 text-sm text-slate-500">Silakan kembali ke halaman Blog dan pilih artikel yang tersedia.</p>
+      <a href="index.html?page=blog" class="mt-5 inline-flex rounded-xl bg-brandRed px-4 py-2.5 text-sm font-bold text-white">Kembali ke Blog</a>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+  <script src="article.js"></script>
+</body>
+</html>
