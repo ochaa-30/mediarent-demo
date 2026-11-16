@@ -1,4 +1,53 @@
-let appData = { products: [], portfolios: [], testimonials: [], blogs: [], cart: [] };
+const defaultAppData = {
+  products: [
+    {
+      id: 1,
+      name: "Smart TV Display 55 Inch + Standing Bracket",
+      category: "TV Display",
+      price: 450000,
+      image_url: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80",
+      description: "Layar Smart TV 4K UHD 55 inch lengkap dengan standing bracket beroda, kabel HDMI 5m, dan remote."
+    },
+    {
+      id: 2,
+      name: "Interactive Touchscreen Kiosk 43 Inch",
+      category: "Touchscreen",
+      price: 850000,
+      image_url: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80",
+      description: "Layar sentuh interaktif multi-touch 10 titik (Windows/Android) untuk registrasi tamu, pameran, dan presentasi."
+    },
+    {
+      id: 3,
+      name: "Starlink Gen 3 Enterprise Kit",
+      category: "Starlink & Modem",
+      price: 950000,
+      image_url: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=800&q=80",
+      description: "Koneksi internet satelit kecepatan tinggi hingga 250 Mbps dengan kuota unlimited untuk event indoor maupun outdoor."
+    },
+    {
+      id: 4,
+      name: "Modem Orbit / MiFi 4G LTE High-Speed",
+      category: "Starlink & Modem",
+      price: 200000,
+      image_url: "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?auto=format&fit=crop&w=800&q=80",
+      description: "Modem cadangan/backup internet stabil untuk booth pameran, kasir POS, dan live streaming skala kecil."
+    },
+    {
+      id: 5,
+      name: "Paket Kabel HDMI 15 Meter + HDMI Splitter",
+      category: "Kabel & Aksesori",
+      price: 100000,
+      image_url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+      description: "Kabel HDMI panjang anti-interferensi support 4K 60Hz lengkap dengan splitter untuk tampilan multi-layar."
+    }
+  ],
+  portfolios: [],
+  testimonials: [],
+  blogs: [],
+  cart: []
+};
+
+let appData = structuredClone(defaultAppData);
 let currentCategory = 'ALL';
 let currentSearchKeyword = '';
 
@@ -42,15 +91,22 @@ async function loadDataFromBackend() {
     if (dataTestimonials.status === 'success') {
       appData.testimonials = dataTestimonials.data;
     }
+  } catch (err) {
+    console.warn('Mode Demo Statis (GitHub Pages): Menggunakan katalog bawaan.');
+    // Pastikan data default tetap terisi jika API Laravel tidak aktif
+    if (!appData.products || appData.products.length === 0) {
+      appData.products = structuredClone(defaultAppData.products);
+    }
+    if (!appData.testimonials || appData.testimonials.length === 0) {
+      appData.testimonials = structuredClone(defaultAppData.testimonials);
+    }
+  } finally {
 
     renderHomeFeatured();
     renderProductsCatalog(currentSearchKeyword);
     renderPortfolios();
     renderTestimonials();
     renderBlogs();
-  } catch (err) {
-    console.error('Gagal terhubung ke Laravel Backend:', err);
-    showToast('error', 'Gagal memuat katalog dari database! Pastikan php artisan serve aktif.');
   }
 }
 
