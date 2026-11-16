@@ -2,47 +2,72 @@ const defaultAppData = {
   products: [
     {
       id: 1,
-      name: "Smart TV Display 55 Inch + Standing Bracket",
-      category: "TV Display",
-      price: 450000,
-      image_url: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80",
-      description: "Layar Smart TV 4K UHD 55 inch lengkap dengan standing bracket beroda, kabel HDMI 5m, dan remote."
+      name: "Smart TV 32 Inch",
+      category: "TV & Touchscreen",
+      price: 150000,
+      description: "TV LED 32 Inch Full HD cocok untuk display booth.",
+      image_url: "https://cdn.polytron.co.id/public-assets/polytroncoid/2026/06/PLD-32TC1865.webp"
     },
     {
       id: 2,
-      name: "Interactive Touchscreen Kiosk 43 Inch",
-      category: "Touchscreen",
-      price: 850000,
-      image_url: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80",
-      description: "Layar sentuh interaktif multi-touch 10 titik (Windows/Android) untuk registrasi tamu, pameran, dan presentasi."
+      name: "Smart TV 43 Inch",
+      category: "TV & Touchscreen",
+      price: 250000,
+      description: "Smart TV 43 Inch 4K UHD ideal untuk area registrasi.",
+      image_url: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=600&q=80"
     },
     {
       id: 3,
-      name: "Starlink Gen 3 Enterprise Kit",
-      category: "Starlink & Modem",
-      price: 950000,
-      image_url: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=800&q=80",
-      description: "Koneksi internet satelit kecepatan tinggi hingga 250 Mbps dengan kuota unlimited untuk event indoor maupun outdoor."
+      name: "Smart TV 65 Inch",
+      category: "TV & Touchscreen",
+      price: 500000,
+      description: "TV Layar Besar 65 Inch 4K UHD untuk backdrop event.",
+      image_url: "https://images.unsplash.com/photo-1577979749830-f1d742b96791?auto=format&fit=crop&w=600&q=80"
     },
     {
       id: 4,
-      name: "Modem Orbit / MiFi 4G LTE High-Speed",
-      category: "Starlink & Modem",
-      price: 200000,
-      image_url: "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?auto=format&fit=crop&w=800&q=80",
-      description: "Modem cadangan/backup internet stabil untuk booth pameran, kasir POS, dan live streaming skala kecil."
+      name: "Touchscreen Interactive TV 55 Inch",
+      category: "TV & Touchscreen",
+      price: 750000,
+      description: "TV Interaktif layar sentuh 55 Inch untuk Kiosk & Game Booth.",
+      image_url: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80"
     },
     {
       id: 5,
-      name: "Paket Kabel HDMI 15 Meter + HDMI Splitter",
-      category: "Kabel & Aksesori",
-      price: 100000,
-      image_url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
-      description: "Kabel HDMI panjang anti-interferensi support 4K 60Hz lengkap dengan splitter untuk tampilan multi-layar."
+      name: "Starlink Gen 3 Satellite Kit",
+      category: "Internet & Network",
+      price: 750000,
+      description: "Internet Satelit Starlink Gen 3 Unlimited Kuota High-Speed.",
+      image_url: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: 6,
+      name: "Modem Wifi Router 4G/5G Enterprise",
+      category: "Internet & Network",
+      price: 200000,
+      description: "Modem Wi-Fi kencang support hingga 64 user.",
+      image_url: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: 7,
+      name: "Kabel LAN Cat6 Industrial (50 Meter)",
+      category: "Aksesori & Kabel",
+      price: 50000,
+      description: "Kabel UTP LAN Cat6 50m untuk kestabilan koneksi streaming.",
+      image_url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80"
     }
   ],
   portfolios: [],
-  testimonials: [],
+  testimonials: [,
+  {
+      id: 1,
+      client_name: "Budi Santoso",
+      company_or_event: "EO Jakarta Event Fest",
+      review: "Sewa Starlink Gen 3 dan TV lancar banget!",
+      rating: 5,
+      created_at: "2026-11-11T06:11:25.000000Z"
+    }
+  ];
   blogs: [],
   cart: []
 };
