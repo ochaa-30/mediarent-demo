@@ -58,8 +58,8 @@ const defaultAppData = {
     }
   ],
   portfolios: [],
-  testimonials: [,
-  {
+  testimonials: [
+    {
       id: 1,
       client_name: "Budi Santoso",
       company_or_event: "EO Jakarta Event Fest",
@@ -67,7 +67,7 @@ const defaultAppData = {
       rating: 5,
       created_at: "2026-11-11T06:11:25.000000Z"
     }
-  ];
+  ],
   blogs: [],
   cart: []
 };
@@ -100,6 +100,12 @@ window.addEventListener('DOMContentLoaded', () => {
   if (['home', 'about', 'product', 'portfolio', 'testimoni', 'blog'].includes(requestedPage)) {
     navigateTo(requestedPage);
   }
+  // Tampilkan data lokal terlebih dulu agar katalog dan navigasi tetap berfungsi
+  // ketika situs dijalankan tanpa backend, termasuk pada hosting statis.
+  renderHomeFeatured();
+  renderProductsCatalog(currentSearchKeyword);
+  renderPortfolios();
+  renderTestimonials();
   loadDataFromBackend();
 });
 
